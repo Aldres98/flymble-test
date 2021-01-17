@@ -1,33 +1,59 @@
-import React, { useState } from 'react'
-import { CartContextType, ICartItem } from './components/global_interfaces';
+import React, { Dispatch, useReducer } from 'react'
+import {
+    productReducer,
+    shoppingCartReducer,
+    ProductActions,
+    ShoppingCartActions
+} from "./reducers";
 
-type Props = {
-    children: React.ReactNode;
-  };
-  
 
-const initialContext: CartContextType = {
-    cart:
-        [
-            { id: 1, title: "1", price: 10 },
-            { id: 2, title: "3", price: 50 }
-        ],
-    setCart: (state: ICartItem): void => {
-        console.log(//item);
-        //throw new Error('Override it first, pal ;)');
-    },
+type ProductType = {
+    id: number;
+    title: string;
+    price: number;
 };
 
 
-export const CartContext = React.createContext<CartContextType | null>(initialContext);
 
-export const CartProvider = ({ children }: Props) => {
+type InitialStateType = {
+    products: { products: ProductType[], loading: boolean, error: boolean },
+    shoppingCart: number;
+};
 
-    const [cart, setCart] = useState<CartContextType>(initialContext);
+
+const initialState = {
+    products: { products: [], loading: false, error: false },
+    shoppingCart: 0
+};
+
+
+export const CartContext = React.createContext<{
+    state: InitialStateType;
+    dispatch: Dispatch<ProductActions | ShoppingCartActions>;
+}>({
+    state: initialState,
+    dispatch: () => null
+});
+
+
+const mainReducer = (
+    { products, shoppingCart }: InitialStateType,
+    action: ProductActions | ShoppingCartActions
+) => ({
+    products: productReducer(products, action),
+    shoppingCart: shoppingCartReducer(shoppingCart, action),
+
+});
+
+
+const CartProvider: React.FC = ({ children }) => {
+    const [state, dispatch] = useReducer(mainReducer, initialState);
 
     return (
-        <CartContext.Provider value={{ ...cart, setCart }}>
+        <CartContext.Provider value={{ state, dispatch }}>
             {children}
         </CartContext.Provider>
-    )
-}
+    );
+};
+
+export { CartProvider };

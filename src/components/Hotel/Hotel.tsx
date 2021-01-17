@@ -1,19 +1,24 @@
 import * as React from "react";
-import {ICartItem} from '../global_interfaces';
-import {CartContext} from '../../CartContext'
+import { ICartItem } from '../global_interfaces';
+import { CartContext } from '../../CartContext'
+import { Types } from "../../reducers";
+
 
 import './style.css';
 import { useContext } from "react";
 
-export const Hotel = (props: ICartItem) => {   
-    const context = useContext(CartContext)
+export const Hotel = (props: ICartItem) => {
+    const { state, dispatch } = React.useContext(CartContext);
 
-const addToCart = () => {
-    let cartItem: ICartItem = {id: props.id, price: props.price, title: props.title};
-    console.log(cartItem);
-}
+    const addToCart = () => {
+        let cartItem: ICartItem = { id: props.id, price: props.price, title: props.title };
+        console.log(cartItem);
+        dispatch({
+            type: Types.Add
+        });
+    }
 
-return (
+    return (
         <div>
             <h3>{props.title}</h3>
             <h3>{props.price}</h3>
