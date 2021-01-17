@@ -11,19 +11,23 @@ type ProductType = {
     id: number;
     title: string;
     price: number;
+    imageUrl: string;
 };
 
-
+type CartItem = {
+    quantity: number, 
+    product: ProductType
+}
 
 type InitialStateType = {
     products: { products: ProductType[], loading: boolean, error: boolean },
-    shoppingCart: number;
+    shoppingCart: {cartItems: CartItem[]};
 };
 
 
-const initialState = {
+const initialState: InitialStateType = {
     products: { products: [], loading: false, error: false },
-    shoppingCart: 0
+    shoppingCart: {cartItems: []}
 };
 
 

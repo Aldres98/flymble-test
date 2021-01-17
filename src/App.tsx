@@ -1,13 +1,21 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import { Cart } from './components/Cart/Cart';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Checkout } from './components/Checkout/Checkout';
+import React from 'react';
+
 
 function App() {
   return (
+
+    <BrowserRouter>
     <div className="App">
-      <Cart></Cart>
+      <Switch>
+      <Route exact path="/" component={Cart} />
+      <Route exact path="/checkout" component={Checkout} />
+      </Switch>
     </div>
+    </BrowserRouter>
   );
 }
 

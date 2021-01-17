@@ -9,29 +9,44 @@ import './style.css';
 
 export const Cart = () => {
     const { state, dispatch } = React.useContext(CartContext);
+    const url = "https://60038b62a3c5f10017913464.mockapi.io/product/products"
 
     useEffect(() => {
         dispatch({ type: Types.Fetch_Init })
-        console.log(state.products.loading)
-        fetch("https://60038b62a3c5f10017913464.mockapi.io/product/products")
+        fetch(url)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
-                dispatch({ type: Types.Fetch_Success, payload: { products: data } })
-                console.log(state.products.loading)
+                dispatch({ type: Types.Fetch_Success, payload: { products: data } });
             })
             .catch(error => {
                 console.log(error)
+                alert("something went wrong, we're sorry :(")
                 dispatch({ type: Types.Fetch_Failure })
             })
-    }, ["https://60038b62a3c5f10017913464.mockapi.io/product/products"])
+    }, [url])
+
+
+    useEffect(() => {
+        state.products.products.map(el => {
+            if(!state.shoppingCart.cartItems.find(item => item.product.id == el.id)) {
+            dispatch({
+                type: Types.Add, payload: { cartItem: el }
+            });
+        }
+        });
+    }, [state.products.products.length])
+
 
 
     return (
-        <div>
+        <div className="shopping-cart">
+            <div className="shopping-cart-title">
+                Cart
+            </div>
+
             {
                 state.products && !state.products.loading && state.products.products.map(item => {
-                    let hotelObject: ICartItem = { id: item.id, title: item.title, price: item.price };
+                    let hotelObject: ICartItem = { id: item.id, title: item.title, price: item.price, imageUrl: item.imageUrl };
                     return state.products.loading == false && <Hotel {...hotelObject} key={item.id} />
                 })
             }

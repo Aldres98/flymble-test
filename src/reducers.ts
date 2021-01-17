@@ -1,3 +1,5 @@
+import { act } from "react-dom/test-utils";
+
 type ActionMap<M extends { [index: string]: any }> = {
     [Key in keyof M]: M[Key] extends undefined
     ? {
@@ -13,6 +15,7 @@ export enum Types {
     Create = "CREATE_PRODUCT",
     Delete = "DELETE_PRODUCT",
     Add = "ADD_PRODUCT",
+    Subtract = "SUBTRACT_PRODUCT",
     Fetch_Init = "FETCH_INIT",
     Fetch_Success = "FETCH_SUCCESS",
     Fetch_Failure = "FETCh_FAILURE"
@@ -22,6 +25,7 @@ type ProductType = {
     id: number;
     title: string;
     price: number;
+    imageUrl: string;
 };
 
 type ProductPayload = {
@@ -69,23 +73,52 @@ export const productReducer = (
 
 };
 
+type CartItem = {
+    quantity: number, 
+    product: ProductType
+}
 
 type ShoppingCartPayload = {
-    [Types.Add]: undefined;
+    [Types.Add]: {cartItem: ProductType};
+    [Types.Subtract]: {id: number}
 };
 
 export type ShoppingCartActions = ActionMap<
     ShoppingCartPayload
 >[keyof ActionMap<ShoppingCartPayload>];
 
+  
 export const shoppingCartReducer = (
-    state: number,
+    state: {cartItems: CartItem[]},
     action: ProductActions | ShoppingCartActions
 ) => {
     switch (action.type) {
-        case Types.Add:
-            return state + 1;
+        case Types.Add: {
+            const updatedCart = state.cartItems;
+            const updatedItemIndex = updatedCart.findIndex(
+                item => item.product.id === action.payload.cartItem.id
+              );
+              if (updatedItemIndex < 0) {
+                updatedCart.push({product: action.payload.cartItem, quantity: 1});
+              } else {
+                const updatedItem = {
+                  ...updatedCart[updatedItemIndex]
+                };
+                updatedItem.quantity++;
+                updatedCart[updatedItemIndex] = updatedItem;
+              }
+              return { ...state, cart: updatedCart };
+        }
+        case Types.Subtract:  {
+            let cartItems = state.cartItems;
+            --cartItems.find(item => item.product.id === action.payload.id)!
+            .quantity;
+            return {...state, cartItems}
+        }
         default:
             return state;
     }
 };
+
+  
+

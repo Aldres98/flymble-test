@@ -3,7 +3,8 @@ import { Dispatch, SetStateAction } from "react";
 export interface ICartItem {
     id: number,
     title: string,
-    price: number
+    price: number,
+    imageUrl: string
 
 }
 
