@@ -36,6 +36,11 @@ body {
     border-bottom: 2px solid #797979;
   }
 
+  .disabled-button {
+      color: gray!important;
+  }
+
+
   
   form {
     display: inline-block;
