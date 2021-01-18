@@ -1,7 +1,7 @@
 import './App.css';
 import { Cart } from './components/Cart/Cart';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { Checkout } from './components/Checkout/Checkout';
+import { Payment } from './components/Payment/Payment';
 import React from 'react';
 
 
@@ -12,7 +12,7 @@ function App() {
     <div className="App">
       <Switch>
       <Route exact path="/" component={Cart} />
-      <Route exact path="/checkout" component={Checkout} />
+      <Route exact path="/payment" component={Payment} />
       </Switch>
     </div>
     </BrowserRouter>

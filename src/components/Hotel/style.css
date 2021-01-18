@@ -128,3 +128,14 @@ input:focus {
     height: auto;
   }
 }
+
+.item-trash-ic {
+  width: 16px;
+  height: 16px;
+}
+
+.cart-item-trash {
+  padding-top: 30px;
+  cursor: pointer;
+}
+

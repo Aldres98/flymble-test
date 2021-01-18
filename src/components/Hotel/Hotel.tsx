@@ -1,31 +1,37 @@
 import * as React from "react";
-import { ICartItem } from '../global_interfaces';
 import { CartContext } from '../../CartContext'
-import { Types } from "../../reducers";
+import { Types, ProductType } from "../../reducers";
 import './style.css';
+import  cartDelete from "../../assets/cartDelete.png";
 
-export const Hotel = (props: ICartItem) => {
+export const Hotel = (props: ProductType) => {
     const { state, dispatch } = React.useContext(CartContext);
+    let quantity = state.shoppingCart.cartItems.find(el => el.product.id == props.id)?.quantity ? state.shoppingCart.cartItems.find(el => el.product.id == props.id)!.quantity : 1;
 
     const addToCart = (e: any) => {
         e.preventDefault();
         e.stopPropagation();
-        let cartItem: ICartItem = { id: props.id, price: props.price, title: props.title, imageUrl: props.imageUrl };
-        console.log('clicked once');
+        let cartItem: ProductType = { id: props.id, price: props.price, title: props.title, imageUrl: props.imageUrl };
         dispatch({
             type: Types.Add,
             payload: { cartItem: cartItem }
         });
     }
-
-    const removeFromCart = (e: any) => {
+    const subtractFromCart = (e: any) => {
         dispatch({
             type: Types.Subtract,
             payload: { id: props.id }
         })
     }
 
-    let quantity = state.shoppingCart.cartItems.find(el => el.product.id == props.id)?.quantity ? state.shoppingCart.cartItems.find(el => el.product.id == props.id)!.quantity : 1;
+    const deleteFromCart = (e: any) => {
+        dispatch({type: Types.Delete, payload: {id: props.id}});
+        dispatch({type: Types.DeleteFromCart, payload: {id:props.id}})
+    }
+
+    React.useEffect(() => {
+        quantity = state.shoppingCart.cartItems.find(el => el.product.id == props.id)?.quantity ? state.shoppingCart.cartItems.find(el => el.product.id == props.id)!.quantity : 1;
+    }, [state.shoppingCart.cartItems.length])
 
     return (
         <div className="item">
@@ -43,7 +49,7 @@ export const Hotel = (props: ICartItem) => {
             </div>
 
             <div className="quantity">
-                <button disabled={quantity == 1} className="plus-btn" type="button" name="button" onClick={e => removeFromCart(e)}>
+                <button disabled={quantity == 1} className="plus-btn" type="button" name="button" onClick={e => subtractFromCart(e)}>
                     -
             </button>
                 <input type="text" name="name" placeholder={String(quantity)} />
@@ -52,6 +58,9 @@ export const Hotel = (props: ICartItem) => {
                 </button>
             </div>
             <div className="total-price">${(props.price * quantity)}</div>
+            <div className="cart-item-trash" onClick={e => deleteFromCart(e)}>
+                <img className="item-trash-ic" src={cartDelete}></img>
+            </div>
         </div>
     )
 }

@@ -1,0 +1,16 @@
+.link-button {
+    cursor: pointer;
+    padding: 12px;
+    margin-bottom: 5px;
+    background: #999;
+    font-family: 'Roboto Slab', sans-serif;
+    font-size: 16px;
+    border: none;
+    color: white;
+    text-decoration: none;
+  }
+
+  .payment-link {
+      color: white;
+      text-decoration: none;
+  }

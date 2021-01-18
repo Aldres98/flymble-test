@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
-import { ICartItem } from '../global_interfaces';
 import { Hotel } from '../Hotel/Hotel';
 import { Total } from '../Total/Total'
 import { CartContext } from '../../CartContext'
-import { Types } from "../../reducers";
+import { Types, ProductType } from "../../reducers";
 
 import './style.css';
 
@@ -46,7 +45,7 @@ export const Cart = () => {
 
             {
                 state.products && !state.products.loading && state.products.products.map(item => {
-                    let hotelObject: ICartItem = { id: item.id, title: item.title, price: item.price, imageUrl: item.imageUrl };
+                    let hotelObject: ProductType = { id: item.id, title: item.title, price: item.price, imageUrl: item.imageUrl };
                     return state.products.loading == false && <Hotel {...hotelObject} key={item.id} />
                 })
             }
