@@ -74,7 +74,7 @@ export const Payment = (state: any) => {
                 {errors.email && <p className="error-message">Invalid email address</p>}
 
 
-                <input className="form-button" type="submit" disabled={!formState.isValid}></input>
+                <input className={formState.isValid? "form-button" : "form-button disabled-button"} type="submit" disabled={!formState.isValid}></input>
             </form>
         </div>
     );
