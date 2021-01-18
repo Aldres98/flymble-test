@@ -14,7 +14,7 @@ export const Total = () => {
         <div>
             <p>Total items: {totalItems} </p>
             <p>Price: {totalPrice}$</p>
-            <button className="link-button" ><Link className="payment-link" to="/payment">Payment</Link></button>
+            <Link className="payment-link" to="/payment"> <button className="link-button" >Payment</button></Link>
         </div>
     )
 }
